@@ -17,8 +17,8 @@ namespace Assignment2
         {
             public double time;
             public double velocity;
-            public double acceleration;
-            public double altitude;
+            public double current;
+            public double dcurrent;
         }
 
         List<row> table = new List<row>();
@@ -28,10 +28,28 @@ namespace Assignment2
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+
+        private void calculatecurrent()
         {
+            for ( int i=1; i< table.Count; i++)
+            {
+                double dQ = table[i].current - table[i - 1].current;
+                double dt = table[i].time - table[i - 1].time;
+                table[i].current = dQ / dt;
+            }
 
         }
+        private void calculateDcurrent()
+        {
+            for (int i = 2; i < table.Count; i++)
+            {
+                double dI = table[i].current - table[i - 1].current;
+                double dt = table[i].time - table[i - 1].time;
+                table[i].current = dI / dt;
+            }
+
+        }
+
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -50,9 +68,11 @@ namespace Assignment2
                             table.Add(new row());
                             string[] r = sr.ReadLine().Split(',');
                             table.Last().time = double.Parse(r[0]);
-                            table.Last().altitude = double.Parse(r[1]);
+                            table.Last().dcurrent = double.Parse(r[1]);
                         }
                     }
+                    calculatecurrent();
+                    calculateDcurrent();
                 }
                 catch (IOException)
                 {
@@ -66,7 +86,11 @@ namespace Assignment2
                 {
                     MessageBox.Show(openFileDialog1.FileName + " is not in the required format");
                 }
-            }
+                catch (DivideByZeroException )
+                {
+                    MessageBox.Show(openFileDialog1.FileName + "has rows that have the same time");
+                }
+            }   
 
         }
     }
