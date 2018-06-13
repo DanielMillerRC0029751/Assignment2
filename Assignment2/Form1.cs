@@ -17,8 +17,8 @@ namespace Assignment2
         {
             public double time;
             public double velocity;
-            public double current;
-            public double dcurrent;
+            public double charge;
+            public double altitude;
         }
 
         List<row> table = new List<row>();
@@ -29,23 +29,23 @@ namespace Assignment2
         }
 
 
-        private void calculatecurrent()
+        private void calculatevelocity()
         {
             for ( int i=1; i< table.Count; i++)
             {
-                double dQ = table[i].current - table[i - 1].current;
+                double dQ = table[i].charge - table[i - 1].charge;
                 double dt = table[i].time - table[i - 1].time;
-                table[i].current = dQ / dt;
+                table[i].charge = dQ / dt;
             }
 
         }
-        private void calculateDcurrent()
+        private void calculatealtitude()
         {
             for (int i = 2; i < table.Count; i++)
             {
-                double dI = table[i].current - table[i - 1].current;
+                double dI = table[i].altitude - table[i - 1].altitude;
                 double dt = table[i].time - table[i - 1].time;
-                table[i].current = dI / dt;
+                table[i].altitude = dI / dt;
             }
 
         }
